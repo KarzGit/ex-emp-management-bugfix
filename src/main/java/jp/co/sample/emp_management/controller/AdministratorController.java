@@ -77,7 +77,8 @@ public class AdministratorController {
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
-		return "employee/list";
+		//return "employee/list"; 管理者登録後ログイン画面に遷移↓
+		return "administrator/insert";
 	}
 
 	/////////////////////////////////////////////////////
