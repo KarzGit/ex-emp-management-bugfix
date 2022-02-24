@@ -77,7 +77,11 @@ public class AdministratorController {
 		if(result.hasErrors()) {
 			return toInsert();
 		}
-		Administrator administrator = new Administrator();
+		Administrator administrator = administratorService.findByMailAddress(form.getMailAddress());
+		if(administrator!=null) {
+			result.rejectValue("mailAddress", null, "メールアドレスが重複しています。");
+			return toInsert();
+		}
 		// フォームからドメインにプロパティ値をコピー
 		BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator);
