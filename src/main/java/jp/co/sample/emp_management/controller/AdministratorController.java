@@ -83,10 +83,14 @@ public class AdministratorController {
 			return toInsert();
 		}
 		// フォームからドメインにプロパティ値をコピー
-		BeanUtils.copyProperties(form, administrator);
-		administratorService.insert(administrator);
+		Administrator administrator2=new Administrator();
+		administrator2.setName(form.getName());
+		administrator2.setMailAddress(form.getMailAddress());
+		administrator2.setPassword(form.getPassword());
+		//BeanUtils.copyProperties(form, administrator);
+		administratorService.insert(administrator2);
 		//return "employee/list"; 管理者登録後ログイン画面に遷移↓
-		return "administrator/insert";
+		return "redirect:/";
 	}
 
 	/////////////////////////////////////////////////////
