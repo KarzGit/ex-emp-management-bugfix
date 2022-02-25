@@ -3,6 +3,7 @@ package jp.co.sample.emp_management.controller;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -83,9 +84,10 @@ public class AdministratorController {
 		}
 		// フォームからドメインにプロパティ値をコピー
 		Administrator administrator2=new Administrator();
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		administrator2.setName(form.getName());
 		administrator2.setMailAddress(form.getMailAddress());
-		administrator2.setPassword(form.getPassword());
+		administrator2.setPassword(encoder.encode(form.getPassword()));
 		//BeanUtils.copyProperties(form, administrator);
 		administratorService.insert(administrator2);
 		//return "employee/list"; 管理者登録後ログイン画面に遷移↓
@@ -116,8 +118,9 @@ public class AdministratorController {
 	 */
 	@RequestMapping("/login")
 	public String login(LoginForm form, BindingResult result, Model model) {
-		Administrator administrator = administratorService.login(form.getMailAddress(), form.getPassword());
-		if (administrator == null) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		Administrator administrator = administratorService.findByMailAddress(form.getMailAddress());
+		if (!encoder.matches(form.getPassword(),administrator.getPassword())) {
 			model.addAttribute("errorMessage", "メールアドレスまたはパスワードが不正です。");
 			return toLogin();
 		}

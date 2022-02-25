@@ -4,6 +4,10 @@ const cPassword=document.getElementById('cPassword');
 const unconfirm=document.getElementById('unconfirm');
 const subBtn=document.getElementById('subBtn');
 password.addEventListener("keyup", () => {
+	subBtn.disabled=true;
+});
+
+cPassword.addEventListener("keyup", () => {
 	if (password.value!=cPassword.value) {
 		unconfirm.textContent='パスワードが一致しません';
 		unconfirm.style.color='red';
